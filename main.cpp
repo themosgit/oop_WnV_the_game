@@ -7,8 +7,8 @@
 using namespace std;
 
 int main() {
-    Game_visuals Game;
-    Game.Make_map();
-    Game.Draw_map();
+    Map map1;
+    map1.Populate_Map();
+    map1.Display_map();
     return 0;
 }
