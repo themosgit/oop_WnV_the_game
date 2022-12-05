@@ -6,19 +6,22 @@
 #define OOP_WNV_THE_GAME_HEADER_H
 
 #endif //OOP_WNV_THE_GAME_HEADER_H
-class Game_visuals {
-private:
-    int map_x = 0;
-    int map_y = 0;
-    char** map = NULL;
+class Graphics{
+protected:
+    int playble_width = 0;
+    int playble_height = 0;
 public:
-    Game_visuals();
-    void Make_map();
-    void Draw_map();
 
+    Graphics();
 };
 
-class Map : private Game_visuals {
+class Map : protected Graphics {
+private:
+    int map_x = playble_width + 2;
+    int map_y = playble_height + 2;
 public:
-
+    char** map = NULL;
+    Map();
+    void Populate_Map();
+    void Display_map();
 };
