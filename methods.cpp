@@ -30,27 +30,39 @@ Map::Map() {
             if ( i == 0 || i == map_x - 1) map[i][j] = '*';
             else if (j == 0 || j == map_y - 1) map[i][j] = '*';
             else {
-                if (rand() % 15 == 0 && obstacles < obstacle_limit) {
-                    obstacles++;
-                    if (rand() % 2 == 0)map[i][j] = 'T';
-                    else map[i][j] = '~';
-                } else map[i][j] = ' ';
+                if (i == avatar_x && j == avatar_y) map[i][j] = 'A';
+                else {
+                    if (rand() % 15 == 0 && obstacles < obstacle_limit) {
+                        obstacles++;
+                        if (rand() % 2 == 0)map[i][j] = 'T';
+                        else map[i][j] = '~';
+                    }
+                    else map[i][j] = ' ';
+                }
             }
         }
     }
 }
 
-void Map::Populate_Map() {
-
-}
+void Map::Populate_Map() {}
 
 void Map::Display_map() {
     for (int i = 0; i < map_x; ++i) {
         for (int j = 0; j < map_y; ++j) {
-            cout << map[i][j] <<"  ";
+            cout << map[i][j] <<" ";
         }
         printf("\n");
     }
 }
 
+void Map::movement(int ud, int lr) {
+    map[avatar_x][avatar_y] = ' ';
+    if (map[avatar_x + ud][avatar_y] == ' ') avatar_x += ud;
+    if (map[avatar_x][avatar_y + lr] == ' ') avatar_y += lr;
+    map[avatar_x][avatar_y] = 'A';
+}
 
+Map::~Map() {
+    delete[] *map;
+    delete[]  map;
+}

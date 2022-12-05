@@ -16,12 +16,16 @@ public:
 };
 
 class Map : protected Graphics {
-private:
+protected:
     int map_x = playble_width + 2;
     int map_y = playble_height + 2;
+    int avatar_x = playble_width / 2;
+    int avatar_y = playble_height / 2;
 public:
     char** map = NULL;
     Map();
     void Populate_Map();
     void Display_map();
+    void movement(int ud, int lr);
+    ~Map();
 };
