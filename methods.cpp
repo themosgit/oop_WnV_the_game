@@ -11,10 +11,10 @@ using namespace std;
 
 Graphics::Graphics() {
     cout << "Enter Map Dimensions\n"
-         << "X axis : ";
-    cin >> playble_width;
-    cout << "Y axis : ";
+         << "Y axis : ";
     cin >> playble_height;
+    cout << "X axis : ";
+    cin >> playble_width;
 }
 
 Map::Map() {
