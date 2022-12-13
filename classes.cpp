@@ -14,7 +14,7 @@ int Being::get_posis() {
 //avatar
 Avatar::Avatar(){}
 Avatar::~Avatar(){}
-int Avatar::get_filt() { return filter; }
+int Avatar::get_filter() { return filter; }
 void Avatar::use_filter() {
 	if (filter > 0) {
 		filter--;
@@ -29,7 +29,7 @@ void Avatar::incr_filter() {
 }
 
 //creature
-creature::creature() {
+creature::creature():Being() {
 	health = 5;
 	power = rand() % 3 + 1;
 	defence = rand() % 2 + 1;
@@ -43,42 +43,48 @@ int creature::get_power()   {return power; }
 int creature::get_defence() {return defence; }
 int creature::get_giatriko(){return giatriko; }
 
-void creature::get_damaged() {			//idia klash
-	int n = power - defence;
-	health = health - abs(n);
-	cout << "\n new health is " << health << endl;
-}
-
-void creature::healing() {		//idia klash
-	if (giatriko > 0){
-		health = health + 3;
-		giatriko--;
-		cout << "\n new health=" << health << "\n new giatriko=" << giatriko << endl;}
-	else
-	cout << "\nnot enough giatriko" << endl;}
-
-void creature::get_healed() {
-	health = health + 3;
-	cout << "\n creature got healed \nnew health=" << health << endl;
-}
-
-//Vampire
-
-Vampire::Vampire():creature(){
-	cout << "\n Creating Vampire" << endl;
+void creature::show(){
 	cout << "\nhealth=" << get_health() << "\npower = " << get_power() <<
 		"\ndefence = " << get_defence() << "\ngiatriko = " << get_giatriko() << endl;
 }
-	
+void creature::battle_or_heal(creature* a) {
+	if (a->is_vampire() == is_vampire()) {
+		if (giatriko != 0) {
+			a->health++;
+			giatriko--;
+			cout << "\n healed creature";
+		}
+		else cout << "\n not enough giatriko";
+	}	
+	else if (a->is_vampire() != is_vampire()){
+		if (get_power() < a->get_power())
+			cout << "\n cant attack is stronger";
+		else if (get_power() >= a->get_power())
+		{
+			a->health = a->health - abs(a->get_defence() - get_power());
+				cout << "\n attacked creature health is " << a->get_health();
+		}
+	}
+}
+
+
+//Vampire
+Vampire::Vampire():creature(){
+	cout << "\n Creating Vampire" << endl;	
+}
+bool Vampire::is_vampire(){ return true; }
+bool Vampire::is_werewolf(){return false;}
 Vampire::~Vampire() {}
 
 //werewolf
 Werewolf::Werewolf():creature() {
-		cout << "\n Creating Werewolf" << endl;
-		cout << "\nhealth=" << get_health() << "\npower = " << get_power() <<
-			"\ndefence = " << get_defence() << "\ngiatriko = " << get_giatriko() << endl;
+		cout << "\n Creating Werewolf " << endl;
 }
 Werewolf::~Werewolf(){}
+bool Werewolf::is_vampire(){ return false;}
+bool Werewolf::is_werewolf(){return true;}
+
+
 
 
 
