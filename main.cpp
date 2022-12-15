@@ -13,14 +13,14 @@ int  main() {
 
 	int i = 0;
 
-	Vampire* vamp;
-	vamp = new Vampire[num];
+	//Vampire* vamp;
+	//vamp = new Vampire[num];
 	
-	//for (i = 0; i < num; i++)
-	//	vamp[i].show();
-
-
-	//vector<Vampire*> vamp;
+	//for (i = 0; i < num; i++) {
+	//	vamp[i].move();
+	
+	
+	//vector<Vampire*> vamp;	
 	//vector<Werewolf*> wer;
 	//cout << "\n  Vampires:" << endl;
 	//for (int i = 0; i <= num; i++) {
@@ -32,4 +32,16 @@ int  main() {
 	//	Werewolf w;
 	//	wer.push_back(&w);
 	//	i++;}
+
+
+	vector<Vampire> v;
+	for (int i = 0; i < num; i++) {
+		Vampire a;
+		// inserting objects to vector
+		v.push_back(a);
+	}
+	for (int i = 0; i < v.size(); i++) {
+		v[i].show();
+	}
+	
 }
