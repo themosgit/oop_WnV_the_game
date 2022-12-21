@@ -19,7 +19,29 @@ int Being::get_y() { return y_coord; }
 //avatar
 Avatar::Avatar(){}
 Avatar::~Avatar(){}
-
+void Avatar::choose_team() {
+	cout << "\nchoose team";
+	cout << "\n[1] Vampires , [2] Werewolves ";
+	int c;
+	cin >> c;
+	switch (c) {
+	case (1): {
+		cout << "\nteam vampires";
+		team_V = true;
+		team_W = false;
+		break; }
+	case(2): {
+		cout << "\nteam werewolves";
+		team_V = false;
+		team_W = true;
+		break; }
+	default :{
+		cout << "\ntry again";
+		choose_team();}
+	}
+}
+bool Avatar::team_vamp() { return team_V; }
+bool Avatar::team_wer() { return team_W; }
 int Avatar::get_filter() { return filter; }
 void Avatar::use_filter() {
 	if (filter > 0) {
@@ -51,13 +73,21 @@ void creature::show(){
 	cout << "\nhealth=" << get_health() << "\npower = " << get_power() <<
 		"\ndefence = " << get_defence() << "\ngiatriko = " << get_giatriko() <<  endl;
 }
-bool creature::is_alive() { return true; }
+bool creature::is_alive() {
+	if (get_health() > 0)
+		return true;
+	else return false;
+}
 void creature::get_healed() {
-	if (health < 4) {
-		health++;
-		cout << "\n creature got healed \nnew health=" << health << endl;
+	if (is_alive()) {
+		if (health < 4 && health>0) {
+			health++;
+			cout << "\n creature got healed \nnew health=" << health << endl;
+		}
+		else if (health =4) 
+			cout << "\n creature has max health";
 	}
-	else cout << "\n creature has max health";
+	else cout << "\n cant heal is dead ";
 }
 void creature::battle_or_heal(creature* a) {
 	int x = a->get_x() - get_x();

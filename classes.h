@@ -19,9 +19,15 @@ public:
 class Avatar  :public Being {
 	protected:
 		int filter = 1; 
+		bool team_V;
+		bool team_W;
 	public :
 	Avatar();
 	~Avatar();
+	void choose_team();
+	bool team_vamp();
+	bool team_wer();
+	//void get_team();
 		int get_filter();
 	void use_filter();	//heal team
 	void incr_filter(); // auxisi filtro
