@@ -1,75 +1,47 @@
-#include "classes.h"
+
 #include <iostream>
 #include <Windows.h>
+#include "header.h"
+#include <ctime>
 #include <vector>
 using namespace std;
 
+int main() {
+    srand(time(nullptr));
+    Map map;
+    Avatar a(&map);
+    int x = map.Get_mapx();
+    int y = map.Get_mapy();
+    int num = x*y/15;
+    vector <Werewolf> w;
+    vector <Vampire> v;
+    for (int i = 0; i < num; i++) {
+        Vampire a;
+        Werewolf b;
+        v.push_back(a);
+        w.push_back(b);
+    }
 
-int  main() {
-	srand(time(NULL));
-	
-	Avatar a;
-	a.choose_team();
-	
-	int  num;
-	cout << "\n how many vampires/werewolfs do you want;" << endl;
-	cin >> num;
-	int i = 0;
-	
-	//Vampire* vamp;
-	//vamp = new Vampire[num];
+    bool game_playing = true;
+    bool pause = false;
+    system("cls");
+    while (game_playing) {
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 0,0 });
+        map.Display_map();
+        system("pause>nul");
+        if (GetKeyState(VK_UP) & 0x8000) a.avatar_move(-1, 0, &map);
+        if (GetKeyState(VK_DOWN) & 0x8000) a.avatar_move(1, 0, &map);
+        if (GetKeyState(VK_LEFT) & 0x8000) a.avatar_move(0, -1, &map);
+        if (GetKeyState(VK_RIGHT) & 0x8000) a.avatar_move(0, 1, &map);
+        if (GetKeyState(VK_F1) & 0x8000) game_playing = false;
+        if (GetKeyState(VK_F2) & 0x8000) pause = true;
 
-	//vector<Vampire*> vamp;	
-	//vector<Werewolf*> wer;
-	//for (int i = 0; i <= num; i++) {
-	//	Vampire v;
-	//  Werewolf w;
-	//	vamp.push_back(&v);
-	//  wer.push_back(&w);
-		//i++;}
-
-	//vector<Vampire*> vamp;
-	//vector<Werewolf*> wer;
-	//for (int i = 0; i <= num; i++) {
-	//	vamp.push_back(new Vampire);
-	//  wer.push_back(new Werewolf);
-		//i++;}
-
-	vector <Werewolf> w;
-	vector<Vampire> v;
-	for (int i = 0; i < num; i++) {
-		Vampire a;
-		Werewolf b;
-		v.push_back(a);
-		w.push_back(b);
-		//cout << "\n" << a.get_health();
-	}
-
-	for (i = 0; i < v.size(); i++) {
-		//i = rand() % v.size();
-			//v[i].move();
-		//cout << "\n" << i;
-		for (int j = 0; j < v.size(); j++) {
-			if (i != j) {
-				v[i].battle_or_heal(&v[j]);
-			}
-		}//}
-		for (int j = 0; j < v.size(); j++) {
-			if (w[j].is_alive() == true)
-				v[i].battle_or_heal(&w[j]);
-		}
-	}
-	//int wer = 1;
-	//while (wer > 0) {
-		//int f = 0;
-		//for (int j = 0; j < v.size(); j++) {
-			//if (w[j].is_alive() == true)
-				//f++;}
-	//	cout << "\nf= " << f;
-	//	wer = f;}
-
-		//while (v.size() > 0 && w.size() > 0) {}
-
-	
+        while (pause) {
+            system("pause");
+            pause = false;
+            system("cls");
+        }
+    }
+    return 0;
 }
 
