@@ -1,4 +1,3 @@
-
 #ifndef WNV_HEADER_H
 #define WNV_HEADER_H
 
@@ -31,8 +30,8 @@ public:
 
 class Being {
 protected:
-    int x_coord=2;
-    int y_coord=2;
+    int x_coord;
+    int y_coord;
 public:
     Being();
     ~Being();
@@ -68,7 +67,7 @@ protected:
     int defence;// = rand() % 2 + 1;
     int giatriko;// = rand() % 2;
     char signate;
-
+    bool is_alive;
 public:
     //int health;
     creature();
@@ -77,18 +76,18 @@ public:
     int get_power();
     int get_defence() ;
     int get_giatriko();
-    bool is_alive();
+    bool get_alive();
     virtual bool is_vampire()=0;
     virtual bool is_werewolf()=0;
-    void move();
+    void move(Map*);
     void get_healed();
-    void battle_or_heal(creature*);
+    void battle_or_heal(creature*, Map*);
     void show();
 };
 
 class Vampire : public creature {
 public:
-    Vampire();//:creature() {}
+    Vampire(int i, Map*);//:creature() {}
     ~Vampire();
     bool is_vampire() ;
     bool is_werewolf() ;
@@ -96,10 +95,8 @@ public:
 
 class Werewolf: public creature  {
 public:
-    Werewolf(); //:creature() {}
+    Werewolf(int i, Map*); //:creature() {}
     ~Werewolf();
     bool is_vampire();
     bool is_werewolf();
 };
-
-
