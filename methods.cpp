@@ -16,7 +16,7 @@ Graphics::Graphics() {
 Graphics::~Graphics() noexcept = default;
 
 Map::Map() {
-    srand(time(NULL));
+    //srand(time(NULL));
     map = new char* [map_x];
     for (int i = 0; i < map_x; i++) {
         map[i] = new char[map_y];
@@ -29,7 +29,7 @@ Map::Map() {
             if ( i == 0 || i == map_x - 1) map[i][j] = '*';
             else if (j == 0 || j == map_y - 1) map[i][j] = '*';
             else {
-                if (rand() % map_x == 0 && obstacles < obstacle_limit) {
+                if (0 == rand() % map_x && obstacles < obstacle_limit) {
                     obstacles++;
                     if (rand() % 2 == 0)map[i][j] = 'T';
                     else map[i][j] = '~';
@@ -44,14 +44,14 @@ Map::Map() {
     }
 }
 
-int Map::Get_mapx() {
+int Map::Get_mapx() const{
     return playble_width;
 }
-int Map::Get_mapy() {
+int Map::Get_mapy() const{
     return playble_height;
 }
 
-void Map::Display_map() {
+void Map::Display_map() const {
     for (int i = 0; i < map_x; ++i) {
         for (int j = 0; j < map_y; ++j) {
             cout << map[i][j] <<" ";
@@ -65,18 +65,19 @@ Map::~Map() {
     delete[]  map;
 }
 
-Being::Being(){}
-Being::~Being(){}
+Being::Being()= default;
+
+Being::~Being()= default;
 
 int Being::get_posis() {
     cout << "\n x = " << x_coord <<"    "<<"y = " << y_coord << endl;
     return x_coord, y_coord;
 }
 
-int Being::get_x() {
+int Being::get_x() const {
     return x_coord;
 }
-int Being::get_y() {
+int Being::get_y() const {
     return y_coord;
 }
 
@@ -87,7 +88,7 @@ Avatar::Avatar(Map* map){
     map->map[x_coord][y_coord] = team_signate;
 }
 
-Avatar::~Avatar(){}
+Avatar::~Avatar()= default;
 
 void Avatar::choose_team() {
     cout << "\nchoose team";
@@ -123,15 +124,15 @@ void Avatar::avatar_move(int ud, int lr, Map* map) {
 
 }
 
-bool Avatar::team_vamp() {
+bool Avatar::team_vamp() const {
     return team_V;
 }
 
-bool Avatar::team_wer() {
+bool Avatar::team_wer() const {
     return team_W;
 }
 
-int Avatar::get_filter() {
+int Avatar::get_filter() const {
     return filter;
 }
 
@@ -155,47 +156,43 @@ creature::creature():Being() {
     power = rand() % 3 + 1;
     defence = rand() % 2 + 1;
     giatriko = rand() % 2;
+    signate = ' ';
     //cout << "\nhealth="<<health<<"\npower = " << power << "\ndefence = " <<defence << "\ngiatriko = " << giatriko << endl;
 }
 
-creature::~creature() {}
+creature::~creature() = default;
 
-int creature::get_health() {
+int creature::get_health() const {
     return health;
 }
 
-int creature::get_power() {
+int creature::get_power() const {
     return power;
 }
 
-int creature::get_defence() {
+int creature::get_defence() const {
     return defence;
 }
 
-int creature::get_giatriko(){
+int creature::get_giatriko() const{
     return giatriko;
 }
 
-bool creature::get_alive(){
+bool creature::get_alive() const{
     if (is_alive) return true;
     else return false;
 }
 
-void creature::show() {
-    cout << "\nhealth=" << get_health() << "\npower = " << get_power() <<
-         "\ndefence = " << get_defence() << "\ngiatriko = " << get_giatriko() <<  endl;
+void creature::show() const {
+    cout << "\nhealth = " << get_health() << "\npower = " << get_power() <<
+         "\ndefence = " << get_defence() << "\ngiatriko = " << get_giatriko() << "\nalive = " << get_alive() << endl;
 }
 
 void creature::get_healed() {
-    if (is_alive) {
-        if (health < 4 && health>0) {
-            health++;
-            cout << "\n creature got healed \nnew health=" << health << endl;
-        }
-        else if (health = 4)
-            cout << "\n creature has max health";
+    if (health < 4 && health >0) {
+        health++;
+        cout << "creature: "<< signate <<" got healed \nnew health= " << health << endl;
     }
-    else cout << "\n cant heal is dead ";
 }
 
 void creature::battle_or_heal(creature* a, Map* map) {
@@ -204,7 +201,7 @@ void creature::battle_or_heal(creature* a, Map* map) {
         int y = a->y_coord - y_coord;
         if (abs(x) <= 1 && abs(y) <= 1) {
             if (a->is_vampire() == is_vampire()) {
-                if (giatriko != 0) {
+                if (giatriko != 0 && a->health != 4) {
                     a->get_healed();
                     giatriko--;
                 }
@@ -217,12 +214,9 @@ void creature::battle_or_heal(creature* a, Map* map) {
                     a->health = a->health - abs(a->get_defence() - get_power());
                     if (a->get_health() <= 0) {
                         a->signate = ' ';
-                        is_alive = false;
-                        map->map[x_coord][y_coord] = ' ';
-                        x_coord = -10;
-                        y_coord = -10;
+                        a->is_alive = false;
+                        map->map[a->x_coord][a->y_coord] = ' ';
                     }
-                    else  cout << a->get_health();
                 }
             }
         }
@@ -232,7 +226,7 @@ void creature::battle_or_heal(creature* a, Map* map) {
 void creature::move(Map* map){
     if (is_alive) {
         int n;
-        if (is_vampire() == true)
+        if (is_vampire())
             n = rand() % 8;
         else n = rand() % 4;
         switch (n) {
@@ -299,17 +293,20 @@ void creature::move(Map* map){
                 }
                 break;
             default:
-                cout << "\n wrong" << endl;
+                break;
         }
     }
 }
 
 //Vampire
-Vampire::Vampire(int i,Map* map):creature(){
+Vampire::Vampire() {
+    signate = 'v';
+}
+
+void Vampire::initV(int i,Map* map) {
     int num = map->Get_mapx()*map->Get_mapy() / 15;
     x_coord = map->Get_mapx() - num + i - 1;
     y_coord = map->Get_mapy();
-    signate = 'v';
     map->map[x_coord][y_coord] = signate;
 }
 
@@ -321,19 +318,22 @@ bool Vampire::is_werewolf() {
     return false;
 }
 
-Vampire::~Vampire() {}
+Vampire::~Vampire() = default;
 
 
 //werewolf
-Werewolf::Werewolf(int i, Map* map):creature() {
+Werewolf::Werewolf() {
+    signate = 'w';
+}
+
+void Werewolf::initW(int i, Map* map) {
     int num = map->Get_mapx()*map->Get_mapy() / 15;
     x_coord = map->Get_mapx() - num + i - 1;
     y_coord = 1;
-    signate = 'w';
     map->map[x_coord][y_coord] = signate;
 }
 
-Werewolf::~Werewolf(){}
+Werewolf::~Werewolf()= default;
 
 bool Werewolf::is_vampire() {
     return false;
