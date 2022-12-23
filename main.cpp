@@ -108,6 +108,7 @@ int main() {
             for (int i = 0; i < num; ++i) {
                 if (w[i].get_alive()) w[i].show();
             }
+            cout << "\n" <<"Magic Filters Remaining: " << a.get_filter() << endl;
             system("pause");
             pause = false;
             system("cls");
