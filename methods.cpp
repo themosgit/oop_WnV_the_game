@@ -119,7 +119,7 @@ void Avatar::avatar_move(int ud, int lr, Map* map) {
     map->map[x_coord][y_coord] = ' ';
     if (map->map[x_coord + ud][y_coord] == ' ' || map->map[x_coord + ud][y_coord] == '$') x_coord += ud;
     if (map->map[x_coord][y_coord + lr] == ' ' || map->map[x_coord][y_coord + lr] == '$') y_coord += lr;
-    if (map ->map[x_coord][y_coord] == '$') incr_filter();;
+    if (map ->map[x_coord][y_coord] == '$') incr_filter();
     map->map[x_coord][y_coord] = team_signate;
 
 }
@@ -139,14 +139,14 @@ int Avatar::get_filter() const {
 void Avatar::use_filter() {
     if (filter > 0) {
         filter--;
-        cout << "\nused filter,  new filter is " << filter << endl;
+        cout << "Used filter, new filter is " << filter <<"                "<<endl;
     }
-    else cout << "\n dont have filter" << endl;
+    else cout << "You don't have filter                          " << endl;
 }
 
 void Avatar::incr_filter() {
     filter++;
-    cout << "\n new filter is " << filter << endl;
+    cout << "New filter is: " << filter << "                  " <<endl;
 }
 
 //creature
@@ -191,7 +191,7 @@ void creature::show() const {
 void creature::get_healed() {
     if (health < 4 && health >0) {
         health++;
-        cout << "creature: "<< signate <<" got healed \nnew health= " << health << endl;
+        cout << "creature: "<< signate <<" got healed \nnew health = " << health << "                    " <<endl;
     }
 }
 

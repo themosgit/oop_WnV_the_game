@@ -39,23 +39,48 @@ int main() {
     system("cls");
     int numw;
     int numv;
+    int counter_day = num * 20;
+    bool day = true;
     while (game_playing) {
         numw = num;
         numv = num;
+        if (counter_day <= 0 && !day){
+            day = true;
+            counter_day = num * 20;
+        }
+        if (counter_day <= 0 && day){
+            day = false;
+            counter_day = num * 20;
+        }
         for (int i = 0; i < num; ++i) {
-            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 0,0 });
-            map.Display_map();
             if (GetKeyState(VK_UP) & 0x8000) a.avatar_move(-1, 0, &map);
             if (GetKeyState(VK_DOWN) & 0x8000) a.avatar_move(1, 0, &map);
             if (GetKeyState(VK_LEFT) & 0x8000) a.avatar_move(0, -1, &map);
             if (GetKeyState(VK_RIGHT) & 0x8000) a.avatar_move(0, 1, &map);
             if (GetKeyState(VK_F1) & 0x8000) game_playing = false;
             if (GetKeyState(VK_F2) & 0x8000) pause = true;
+            if (GetKeyState(VK_F3) & 0x8000) {
+
+                if(a.get_filter() > 0) {
+                    if (a.team_vamp() && !day) {
+                        a.use_filter();
+                        for (int j = 0; j < num; ++j) {
+                            v[j].get_healed();
+                        }
+                    } else if (!a.team_vamp() && day) {
+                        for (int j = 0; j < num; ++j) {
+                            w[j].get_healed();
+                        }
+                        a.use_filter();
+                    } else cout << "Incorrect time of day can't use filter    " << endl;
+                } else a.use_filter();
+            }
             v[i].move(&map);
             w[i].move(&map);
-            for (int j = num; j < 10; ++j) sleep_for(5ms);
             for (int j = 0; j < num; ++j) {
-                    sleep_for(5ms);
+                if (num <= 2) sleep_for(100ms);
+                else sleep_for (10ms);
+                --counter_day;
                 if (j != i) {
                     v[i].battle_or_heal(&w[j], &map);
                     w[i].battle_or_heal(&w[j], &map);
@@ -68,10 +93,14 @@ int main() {
             }
             if (!v[i].get_alive()) --numv;
             if (!w[i].get_alive()) --numw;
+            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 0,0 });
+            if (day) cout << "It's Day!!\n";
+            else cout << "It's Night!!\n";
+            map.Display_map();
         }
         if (numv == 0 || numw == 0) game_playing = false;
         while (pause) {
-            cout << "\n\n\n" << "Vampires Remaining: " << numv << endl;
+            cout << "Vampires Remaining: " << numv <<"           "<< endl;
             for (int i = 0; i < num; ++i) {
                 if (v[i].get_alive()) v[i].show();
             }
