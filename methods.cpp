@@ -342,9 +342,3 @@ bool Werewolf::is_vampire() {
 bool Werewolf::is_werewolf() {
     return true;
 }
-
-
-
-
-
-
