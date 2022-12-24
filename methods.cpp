@@ -7,10 +7,10 @@ using namespace std;
 
 Graphics::Graphics() {
     cout << "Enter Map Dimensions\n"
-         << "Y axis: ";
-    cin >> playble_height;
-    cout << "X axis: ";
+         << "X axis: ";
     cin >> playble_width;
+    cout << "Y axis: ";
+    cin >> playble_height;
 }
 
 Graphics::~Graphics() noexcept = default;
@@ -21,7 +21,7 @@ Map::Map() {
     for (int i = 0; i < map_x; i++) {
         map[i] = new char[map_y];
     }
-    int obstacle_limit = (playble_height * playble_width) / 4;
+    int obstacle_limit = (playble_width * playble_height) / 4;
     int obstacles = 0;
     bool giatriko = true;
     for (int i = 0; i < map_x; i++) {
