@@ -132,6 +132,7 @@ bool Avatar::team_wer() const {
     return team_W;
 }
 
+
 int Avatar::get_filter() const {
     return filter;
 }
