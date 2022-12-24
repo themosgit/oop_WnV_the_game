@@ -10,14 +10,14 @@ Graphics::Graphics() { // initialises game checking whether the input dimensions
          << "Y axis: ";
     cin >> playble_width;
     while (playble_width <= 2 || playble_width >15 ){
-        cout << "Enter Map Dimensions Between 2 and 15\n"
+        cout << "Enter Map Dimensions Between 3 and 15\n"
              << "Y axis: ";
         cin >> playble_width;
     }
     cout << "X axis: ";
     cin >> playble_height;
     while (playble_height <= 2 || playble_height > 15 ){
-        cout << "Enter Map Dimensions Between 2 and 15\n"
+        cout << "Enter Map Dimensions Between 3 and 15\n"
              << "Y axis: ";
         cin >> playble_width;
     }
