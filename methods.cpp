@@ -5,23 +5,52 @@
 
 using namespace std;
 
-Graphics::Graphics() {
+Graphics::Graphics() { // initialises game checking whether the input dimensions are legal
     cout << "Enter Map Dimensions\n"
          << "Y axis: ";
-    cin >> playble_height;
-    cout << "X axis: ";
     cin >> playble_width;
+    while (playble_width <= 2 || playble_width >15 ){
+        cout << "Enter Map Dimensions Between 3 and 15\n"
+             << "Y axis: ";
+        cin >> playble_width;
+    }
+    cout << "X axis: ";
+    cin >> playble_height;
+    while (playble_height <= 2 || playble_height > 15 ){
+        cout << "Enter Map Dimensions Between 3 and 15\n"
+             << "Y axis: ";
+        cin >> playble_width;
+    }
+    while (playble_width * playble_height / 15 > playble_width){
+        cout << "The game will not run with the dimensions you gave please try again\n"
+             << "Dimensions closer to a square work best\n";
+        cout << "Enter Map Dimensions\n"
+             << "Y axis: ";
+        cin >> playble_width;
+        while (playble_width <= 2 || playble_width >15 ){
+            cout << "Enter Map Dimensions Between 2 and 15\n"
+                 << "Y axis: ";
+            cin >> playble_width;
+        }
+        cout << "X axis: ";
+        cin >> playble_height;
+        while (playble_height <= 2 || playble_height > 15 ){
+            cout << "Enter Map Dimensions Between 2 and 15\n"
+                 << "Y axis: ";
+            cin >> playble_width;
+        }
+    }
 }
 
 Graphics::~Graphics() noexcept = default;
 
 Map::Map() {
     //srand(time(NULL));
-    map = new char* [map_x];
+    map = new char* [map_x];          // constructing map on a dynamic 2d array
     for (int i = 0; i < map_x; i++) {
         map[i] = new char[map_y];
     }
-    int obstacle_limit = (playble_height * playble_width) / 4;
+    int obstacle_limit = (playble_width * playble_height) / 4; //adding obstacles and borders to the map
     int obstacles = 0;
     bool giatriko = true;
     for (int i = 0; i < map_x; i++) {
@@ -51,7 +80,7 @@ int Map::Get_mapy() const{
     return playble_height;
 }
 
-void Map::Display_map() const {
+void Map::Display_map() const { //displaying map
     for (int i = 0; i < map_x; ++i) {
         for (int j = 0; j < map_y; ++j) {
             cout << map[i][j] <<" ";
@@ -81,16 +110,16 @@ int Being::get_y() const {
     return y_coord;
 }
 
-Avatar::Avatar(Map* map){
+Avatar::Avatar(Map* map){      //adding avatar to the map on the correct position
     x_coord = map->Get_mapx() / 2;
     y_coord = map->Get_mapy() / 2;
-    choose_team();
-    map->map[x_coord][y_coord] = team_signate;
+    choose_team(); // choose team of avatar
+    map->map[x_coord][y_coord] = team_signate; // signate is W if team chosen is werewolf V for vampires
 }
 
 Avatar::~Avatar()= default;
 
-void Avatar::choose_team() {
+void Avatar::choose_team() { // assigns avatars team
     cout << "\nchoose team";
     cout << "\n[1] Vampires , [2] Werewolves ";
     int c;
@@ -115,7 +144,7 @@ void Avatar::choose_team() {
     }
 }
 
-void Avatar::avatar_move(int ud, int lr, Map* map) {
+void Avatar::avatar_move(int ud, int lr, Map* map) { // move function for the player avatar
     map->map[x_coord][y_coord] = ' ';
     if (map->map[x_coord + ud][y_coord] == ' ' || map->map[x_coord + ud][y_coord] == '$') x_coord += ud;
     if (map->map[x_coord][y_coord + lr] == ' ' || map->map[x_coord][y_coord + lr] == '$') y_coord += lr;
@@ -131,6 +160,7 @@ bool Avatar::team_vamp() const {
 bool Avatar::team_wer() const {
     return team_W;
 }
+
 
 int Avatar::get_filter() const {
     return filter;
@@ -151,7 +181,7 @@ void Avatar::incr_filter() {
 
 //creature
 creature::creature():Being() {
-    health = 4;
+    health = 4; // assigns values to each being created randomly
     is_alive = true;
     power = rand() % 3 + 1;
     defence = rand() % 2 + 1;
@@ -183,37 +213,37 @@ bool creature::get_alive() const{
     else return false;
 }
 
-void creature::show() const {
+void creature::show() const { // shows the status of each creature mainly used in the pause menu
     cout << "\nhealth = " << get_health() << "\npower = " << get_power() <<
          "\ndefence = " << get_defence() << "\ngiatriko = " << get_giatriko() << "\nalive = " << get_alive() << endl;
 }
 
-void creature::get_healed() {
+void creature::get_healed() { // heals a wounded crature called by battle_or_heal() or when the player is using the magic filter
     if (health < 4 && health >0) {
         health++;
         cout << "creature: "<< signate <<" got healed \nnew health = " << health << "                    " <<endl;
     }
 }
 
-void creature::battle_or_heal(creature* a, Map* map) {
+void creature::battle_or_heal(creature* a, Map* map) { // checks nearby positions for friendly or enemy creatures
     if (a->is_alive && is_alive){
         int x = a->x_coord - x_coord;
         int y = a->y_coord - y_coord;
         if (abs(x) <= 1 && abs(y) <= 1) {
-            if (a->is_vampire() == is_vampire()) {
+            if (a->is_vampire() == is_vampire()) { // if they are friendly attempts to heal
                 if (giatriko != 0 && a->health != 4) {
                     a->get_healed();
                     giatriko--;
                 }
             }
-            else if (a->is_vampire() != is_vampire()) {
-                if (get_power() < a->get_power()) {
+            else if (a->is_vampire() != is_vampire()) { //if they are not and that stats allow it attacks
+                if (get_power() < a->get_power()) { // else it tries to escape
                     move(map);
                 }
                 else if (get_power() >= a->get_power()) {
                     a->health = a->health - abs(a->get_defence() - get_power());
-                    if (a->get_health() <= 0) {
-                        a->signate = ' ';
+                    if (a->get_health() <= 0) { // if a creatures healths reaches below zero it is removed from the map
+                        a->signate = ' '; // and the is alive bool which makes it visible to other creatures is made false
                         a->is_alive = false;
                         map->map[a->x_coord][a->y_coord] = ' ';
                     }
@@ -224,8 +254,8 @@ void creature::battle_or_heal(creature* a, Map* map) {
 }
 
 void creature::move(Map* map){
-    if (is_alive) {
-        int n;
+    if (is_alive) { // movement of each creature whether they are a werewolf or a vampire
+        int n;  // vampires can move diagonally
         if (is_vampire())
             n = rand() % 8;
         else n = rand() % 4;
@@ -303,9 +333,9 @@ Vampire::Vampire() {
     signate = 'v';
 }
 
-void Vampire::initV(int i,Map* map) {
+void Vampire::initV(int i,Map* map) { //puts a vampire at its correct starting position on the map
     int num = map->Get_mapx()*map->Get_mapy() / 15;
-    x_coord = map->Get_mapx() - num + i - 1;
+    x_coord = map->Get_mapx() - num + i + 1;
     y_coord = map->Get_mapy();
     map->map[x_coord][y_coord] = signate;
 }
@@ -326,9 +356,9 @@ Werewolf::Werewolf() {
     signate = 'w';
 }
 
-void Werewolf::initW(int i, Map* map) {
+void Werewolf::initW(int i, Map* map) { //puts a werewolf at its correct starting position on the map
     int num = map->Get_mapx()*map->Get_mapy() / 15;
-    x_coord = map->Get_mapx() - num + i - 1;
+    x_coord = map->Get_mapx() - num + i + 1;
     y_coord = 1;
     map->map[x_coord][y_coord] = signate;
 }

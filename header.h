@@ -7,8 +7,8 @@
 
 class Graphics{
 protected:
-    int playble_width = 0;
     int playble_height = 0;
+    int playble_width = 0;
 public:
     Graphics();
     virtual ~Graphics();
@@ -16,8 +16,8 @@ public:
 
 class Map : protected Graphics {
 protected:
-    int map_x = playble_width + 2;
     int map_y = playble_height + 2;
+    int map_x = playble_width + 2;
 public:
     char** map;
     Map();
