@@ -333,7 +333,7 @@ Vampire::Vampire() {
     signate = 'v';
 }
 
-void Vampire::initV(int i,Map* map) { //puts a vampire at its correct starting position on the map
+void Vampire::initV(int i,Map* map) { //places a vampire at its correct starting position on the map
     int num = map->Get_mapx()*map->Get_mapy() / 15;
     x_coord = map->Get_mapx() - num + i + 1;
     y_coord = map->Get_mapy();
@@ -356,7 +356,7 @@ Werewolf::Werewolf() {
     signate = 'w';
 }
 
-void Werewolf::initW(int i, Map* map) { //puts a werewolf at its correct starting position on the map
+void Werewolf::initW(int i, Map* map) { //places a werewolf at its correct starting position on the map
     int num = map->Get_mapx()*map->Get_mapy() / 15;
     x_coord = map->Get_mapx() - num + i + 1;
     y_coord = 1;
