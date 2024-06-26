@@ -12,11 +12,11 @@ using namespace std::chrono_literals;
 
 int main() {
     srand(time(NULL));
-    Map map;                             //Creating the map subclass of graphics
+    Map map;                 
     Avatar a(&map);                      // creating the avatar player placing them within the map
     int x = map.Get_mapx();
     int y = map.Get_mapy();
-    system("cls");                                // basic instructions
+    system("cls");                               
     cout << "Avatar Movement With Arrow Keys\n"
          << "Exit Game With F1\n"
          << "Pause Game With F2\n"
@@ -31,20 +31,20 @@ int main() {
         Werewolf c;
         b.initV(i, &map);    // placing them in legal places within the map
         c.initW(i, &map);
-        v.push_back(b);   // adding them to their vectors
+        v.push_back(b);  
         w.push_back(c);
     }
     bool game_playing = true;
     bool pause = false;
     system("cls");
-    int numw; // number of werewolves
-    int numv; // number of vampires
-    int counter_day = num * 20; // counter to make the day/night cycle happen
+    int numw; 
+    int numv; 
+    int counter_day = num * 20; // counter to control the day/night cycle 
     bool day = true;
     while (game_playing) {  // main game loop
         numw = num;
         numv = num;
-        if (counter_day <= 0 && !day){  // changing the day with the night
+        if (counter_day <= 0 && !day){ 
             day = true;
             counter_day = num * 20;
         }
@@ -52,20 +52,20 @@ int main() {
             day = false;
             counter_day = num * 20;
         }
-        for (int i = 0; i < num; ++i) {  // this loop is used to cycle between every vampire and werewolf
+        for (int i = 0; i < num; ++i) {  
             if (GetKeyState(VK_UP) & 0x8000) a.avatar_move(-1, 0, &map); // checking for user input
-            if (GetKeyState(VK_DOWN) & 0x8000) a.avatar_move(1, 0, &map); // moving avatar accordingly
+            if (GetKeyState(VK_DOWN) & 0x8000) a.avatar_move(1, 0, &map); 
             if (GetKeyState(VK_LEFT) & 0x8000) a.avatar_move(0, -1, &map);
             if (GetKeyState(VK_RIGHT) & 0x8000) a.avatar_move(0, 1, &map);
             if (GetKeyState(VK_F1) & 0x8000) game_playing = false;
             if (GetKeyState(VK_F2) & 0x8000) pause = true;
-            if (GetKeyState(VK_F3) & 0x8000) { // heal function
+            if (GetKeyState(VK_F3) & 0x8000) { 
 
                 if(a.get_filter() > 0) {          // checks time of day and if the magic filter is available
                     if (a.team_vamp() && !day) {
                         a.use_filter();
                         for (int j = 0; j < num; ++j) { // heals all remaining vampires and werewolves
-                            v[j].get_healed();         // according to the players selected team
+                            v[j].get_healed();         
                         }
                     } else if (!a.team_vamp() && day) {
                         for (int j = 0; j < num; ++j) {
@@ -96,9 +96,9 @@ int main() {
             SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 0,0 }); // refreshing screen
             if (day) cout << "It's Day!!\n";
             else cout << "It's Night!!\n";
-            map.Display_map(); // displaying the map
+            map.Display_map(); 
         }
-        if (numv == 0 || numw == 0) game_playing = false; //pause menu info
+        if (numv == 0 || numw == 0) game_playing = false; //pause menu 
         while (pause) {
             cout << "Vampires Remaining: " << numv <<"           "<< endl;
             for (int i = 0; i < num; ++i) {
@@ -115,7 +115,7 @@ int main() {
         }
     }
     system("cls");
-    if (numw == 0) cout << "Vampires Won!!\n"; // displaying winner
+    if (numw == 0) cout << "Vampires Won!!\n"; 
     else if (numv == 0) cout << "Werewolfs Won!!\n";
     else cout << "Please Wait Exiting Game...\n";
     sleep_for(5000ms);
